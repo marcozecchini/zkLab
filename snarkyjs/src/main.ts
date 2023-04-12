@@ -34,7 +34,7 @@ const deployTxn = await Mina.transaction(deployerAccount, () => {
 await deployTxn.sign([deployerKey, zkAppPrivateKey]).send();
 
 // ----------------------------------------------------
-const localPuzzle = new Puzzle({cell: [[Field(0), Field(2)], [Field(0), Field(2)]]});
+const localPuzzle = new Puzzle({cell: [[Field(0), Field(2)], [Field(0), Field(1)]]});
 const txn1 = await Mina.transaction(senderAccount, () => {
   zkAppInstance.initPuzzle(localPuzzle);
 });
@@ -46,7 +46,7 @@ const puzzle = zkAppInstance.puzzle.get();
 console.log('state after init:', puzzle.cell.toString());
 
 // ----------------------------------------------------
-const localSolution = new Puzzle({cell: [[Field(1), Field(2)], [Field(1), Field(2)]]})
+const localSolution = new Puzzle({cell: [[Field(1), Field(2)], [Field(2), Field(1)]]})
 
 try {
   const txn2 = await Mina.transaction(senderAccount, () => {

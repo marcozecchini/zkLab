@@ -45,7 +45,7 @@ import {
       this.puzzle.assertEquals(currentState);
 
       for (let i = 0; i<2; i++){
-        for (let j = 0; i<2; i++){
+        for (let j = 0; j<2; j++){
             solution.cell[i][j].assertLessThan(10);
             solution.cell[i][j].assertGreaterThan(0);
             let empty_cell = currentState.cell[i][j].equals(Field(0));
@@ -59,17 +59,28 @@ import {
                 cell = temp.and(cell);
                 }
             cell.assertFalse();
-                
-                
-            //Check columns - TODO
-            cell = solution.cell[i][j].equals(solution.cell[i][j])
-            for (let k = 0; k < 2; k++) {
-                let temp = solution.cell[j][i].equals(solution.cell[k][i]);
-                cell = temp.and(cell);
+            
+
+            let col = solution.cell[j][i].equals(solution.cell[j][i])
+                for (let k = 0; k < 2; k++) {
+                    let temp = solution.cell[j][i].equals(solution.cell[k][i]);
+                    col = temp.and(col);
                 }
-            cell.assertFalse();        
+            col.assertFalse();        
             }
         }
+
+        //Check columns - TODO
+        // for (let i = 0; i<2; i++){
+        //     for (let j = 0; j<2; j++){
+        //         let col = solution.cell[j][i].equals(solution.cell[j][i])
+        //         for (let k = 0; k < 2; k++) {
+        //             let temp = solution.cell[j][i].equals(solution.cell[k][i]);
+        //             col = temp.and(col);
+        //         }
+        //     col.assertFalse();        
+        //     }
+        // }
         this.solution.set(solution);
     }
 }
