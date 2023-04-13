@@ -39,6 +39,7 @@ const txn1 = await Mina.transaction(senderAccount, () => {
   zkAppInstance.initPuzzle(localPuzzle);
 });
 await txn1.prove();
+console.log(txn1.toPretty());
 await txn1.sign([senderKey]).send();
 
 // get the initial state of Square after deployment
@@ -53,6 +54,7 @@ try {
     zkAppInstance.updateSolution(localSolution);
   });
   await txn2.prove();
+  console.log(txn2.toPretty());
   await txn2.sign([senderKey]).send();
 } catch (ex: any) {
   console.log(ex.message);

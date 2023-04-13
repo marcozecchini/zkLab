@@ -12,9 +12,6 @@ import {
   export class Puzzle extends Struct({
     cell: [[Field, Field], [Field, Field]],
   }) {
-    hash() {
-        return Poseidon.hash;
-    }
   }
 
   export class Sudoku extends SmartContract {

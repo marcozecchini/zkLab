@@ -18,9 +18,10 @@ console.log('SnarkyJS loaded');
 
 // ----------------------------------------------------
 const Berkeley = Mina.Network(
-    'https://proxy.berkeley.minaexplorer.com/graphql'
-  );
+  'https://proxy.berkeley.minaexplorer.com/graphql'
+);
 Mina.setActiveInstance(Berkeley);
+
 const transactionFee = 100_000_000;
 
 const deployAlias = process.argv[2];
@@ -28,14 +29,16 @@ const deployerKeysFileContents = fs.readFileSync(
   'keys/' + deployAlias + '.json',
   'utf8'
 );
-
 const deployerPrivateKeyBase58 = JSON.parse(
   deployerKeysFileContents
 ).privateKey;
-
 const deployerPrivateKey = PrivateKey.fromBase58(deployerPrivateKeyBase58);
 const deployerPublicKey = deployerPrivateKey.toPublicKey();
-const zkAppPrivateKey = deployerPrivateKey;
+
+const zkAppPrivateKey = PrivateKey.fromBase58(
+  'EKFTMuvTirzrwpeHP8RKe7bGufBGiKs27nTMzD5XyMV8NcK3upt2'
+);
+// const zkAppPrivateKey = PrivateKey.random();
 
 // ----------------------------------------------------
 
@@ -77,7 +80,7 @@ await loopUntilAccountExists({
 
 const localPuzzle = new Puzzle({cell: [[Field(0), Field(2)], [Field(0), Field(1)]]});
 const txn1 = await Mina.transaction(
-  { sender: zkAppPublicKey, fee: transactionFee }, 
+  { sender: deployerPublicKey, fee: transactionFee }, 
   () => {
     zkapp.initPuzzle(localPuzzle);
 });
@@ -88,7 +91,7 @@ console.log(txn1.toPretty());
 let time1 = performance.now();
 console.log(`creating proof took ${(time1 - time0) / 1e3} seconds`);
 
-let pendingTransaction = await txn1.sign([zkAppPrivateKey]).send();
+let pendingTransaction = await txn1.sign([deployerPrivateKey]).send();
 
 if (!pendingTransaction.isSuccess) {
     console.log('error sending transaction 1 (see above)');
@@ -105,11 +108,11 @@ console.log(`updated state! ${await zkapp.puzzle.fetch()}`);
 const localSolution = new Puzzle({cell: [[Field(1), Field(2)], [Field(2), Field(1)]]})
 
 try {
-  const txn2 = await Mina.transaction({ sender: zkAppPublicKey, fee: transactionFee }, () => {
+  const txn2 = await Mina.transaction({ sender: deployerPublicKey, fee: transactionFee }, () => {
     zkapp.updateSolution(localSolution);
   });
   await txn2.prove();
-  pendingTransaction = await txn2.sign([zkAppPrivateKey]).send();
+  pendingTransaction = await txn2.sign([deployerPrivateKey]).send();
 } catch (ex: any) {
   console.log(ex.message);
 }
