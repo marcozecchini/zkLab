@@ -1,11 +1,11 @@
 {
   "version": 1,
   "deployAliases": {
-    "sapienza-tutorial": {
+    "sudoku": {
       "url": "https://proxy.berkeley.minaexplorer.com/graphql",
-      "keyPath": "keys/sapienza-tutorial.json",
+      "keyPath": "keys/sudoku.json",
       "fee": "0.1",
-      "smartContract": "Add"
+      "smartContract": "Sudoku"
     }
   }
 }

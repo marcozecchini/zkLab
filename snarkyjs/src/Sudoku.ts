@@ -70,17 +70,6 @@ import {
             }
         }
 
-        //Check columns - TODO
-        // for (let i = 0; i<2; i++){
-        //     for (let j = 0; j<2; j++){
-        //         let col = solution.cell[j][i].equals(solution.cell[j][i])
-        //         for (let k = 0; k < 2; k++) {
-        //             let temp = solution.cell[j][i].equals(solution.cell[k][i]);
-        //             col = temp.and(col);
-        //         }
-        //     col.assertFalse();        
-        //     }
-        // }
         this.solution.set(solution);
     }
 }
