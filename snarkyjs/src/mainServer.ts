@@ -6,15 +6,12 @@ import {
   Field,
   Mina,
   PrivateKey,
-  AccountUpdate,
 } from 'snarkyjs';
 import fs from 'fs';
 
-const useProof = false;
 await isReady;
 
 console.log('SnarkyJS loaded');
-
 
 // ----------------------------------------------------
 const Berkeley = Mina.Network(
@@ -35,10 +32,10 @@ const deployerPrivateKeyBase58 = JSON.parse(
 const deployerPrivateKey = PrivateKey.fromBase58(deployerPrivateKeyBase58);
 const deployerPublicKey = deployerPrivateKey.toPublicKey();
 
-const zkAppPrivateKey = PrivateKey.fromBase58(
-  'EKFTMuvTirzrwpeHP8RKe7bGufBGiKs27nTMzD5XyMV8NcK3upt2'
-);
-// const zkAppPrivateKey = PrivateKey.random();
+// const zkAppPrivateKey = PrivateKey.fromBase58(
+//   'EKFTMuvTirzrwpeHP8RKe7bGufBGiKs27nTMzD5XyMV8NcK3upt2'
+// );
+const zkAppPrivateKey = PrivateKey.random();
 
 // ----------------------------------------------------
 
@@ -102,7 +99,7 @@ console.log(
   Waiting for transaction to be included...`
   );
 await pendingTransaction.wait();
-console.log(`updated state! ${await zkapp.puzzle.fetch()}`);
+console.log(`updated state! ${(await zkapp.puzzle.fetch())?.toString()}`);
 
 // ----------------------------------------------------
 const localSolution = new Puzzle({cell: [[Field(1), Field(2)], [Field(2), Field(1)]]})
@@ -126,7 +123,7 @@ console.log(
   Waiting for transaction to be included...`
   );
 await pendingTransaction.wait();
-console.log(`updated state! ${await zkapp.solution.fetch()}`);
+console.log(`updated state! ${(await zkapp.puzzle.fetch())?.toString()}`);
 // ----------------------------------------------------
 
 console.log('Shutting down');
